@@ -3,6 +3,11 @@ require "rubygems"
 require "language_pack"
 require "language_pack/base"
 
+require "fileutils"
+require "builder"
+require "rubygems/builder"
+require "rubygems/indexer"
+
 # base Ruby Language Pack. This is for any base ruby app.
 class LanguagePack::Ruby < LanguagePack::Base
   LIBYAML_VERSION     = "0.1.4"
@@ -557,7 +562,9 @@ params = CGI.parse(uri.query || "")
   end
 
   def generate_gem_indexes
-    data_dir = File.join(build_ruby_path, 'data')
-    Gem::Indexer.new(data_dir).generate_index
+    data_dir = File.join(build_path, 'data')
+
+    # Generate gem index if data directory exists.
+    Gem::Indexer.new(data_dir).generate_index if Dir.exist?(data_dir)
   end
 end
