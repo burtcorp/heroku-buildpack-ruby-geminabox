@@ -57,6 +57,7 @@ class LanguagePack::Ruby < LanguagePack::Base
       create_database_yml
       install_binaries
       run_assets_precompile_rake_task
+      generate_gem_indexes
     end
   end
 
@@ -553,5 +554,10 @@ params = CGI.parse(uri.query || "")
         puts "Asset precompilation completed (#{"%.2f" % time}s)"
       end
     end
+  end
+
+  def generate_gem_indexes
+    data_dir = File.join(build_ruby_path, 'data')
+    Gem::Indexer.new(data_dir).generate_index
   end
 end
